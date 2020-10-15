@@ -1,0 +1,19 @@
+Number of *: 2    Runtime: 2
+Number of *: 4    Runtime: 8
+Number of *: 6    Runtime: 22
+Number of *: 8    Runtime: 83
+Number of *: 10    Runtime: 222
+Number of *: 12    Runtime: 1289
+Number of *: 14    Runtime: 2930
+Number of *: 16    Runtime: 8053
+Number of *: 18    Runtime: 26345
+Number of *: 20    Runtime: 106215
+Number of *: 22    Runtime: 353630
+Number of *: 24    Runtime: 1434330
+
+As the number * increases, the runtime increases exponentially
+Number of *: 4    Runtime: 63
+Number of *: 4    Runtime: 10
+Number of *: 4    Runtime: 12
+Number of *: 4    Runtime: 22
+Number of *: 8    Runtime: 145
