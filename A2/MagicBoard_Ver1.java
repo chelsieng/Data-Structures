@@ -91,12 +91,19 @@ public class MagicBoard_Ver1 {
             // Randomly placing 0 value in array
             board[randZero1][randZero2] = 0;
 
-            //Uncomment for custom board
+            //Uncomment for custom board (not possible to solve)
 //        int [][]board= {{1,4,1,3,1},
 //                {4,3,2,1,4},
 //                {3,2,3,1,4},
 //                {1,3,4,2,3},
 //                {3,4,1,2,0}};
+
+            // Uncomment for custom board (possible to solve)
+//        int[][] board = {{4, 2, 1, 3, 1},
+//                {2, 3, 2, 1, 4},
+//                {3, 2, 3, 1, 4},
+//                {1, 3, 4, 2, 3},
+//                {3, 3, 1, 2, 0}};
 
             //Displaying board
             System.out.println("Your board looks like this: ");
