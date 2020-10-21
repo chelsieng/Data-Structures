@@ -439,3 +439,5 @@ It is possible to solve the game from start position.
 Start position: (24, 0)
 It is not possible to solve the game from start position.
 
+
+

@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class MagicBoard_Ver1 {
+    // Recursive method
     public static boolean MagicBoard(int x, int y, int[][] board, boolean[][] validateBoard) {
         // Check if position is off board
         if (x < 0 || x >= board.length || y < 0 || y >= board.length) {
