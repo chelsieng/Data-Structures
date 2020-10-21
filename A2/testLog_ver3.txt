@@ -438,4 +438,3 @@ It is possible to solve the game from start position.
 7	16	15	8	22	17	11	9	16	1	10	12	14	13	7	18	22	1	22	20	3	16	16	19	20	
 Start position: (0, 24)
 It is not possible to solve the game from start position.
-
