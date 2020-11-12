@@ -20,6 +20,18 @@ public class Job {
         waitTime = 0;
     }
 
+    // Parameterized constructor
+    public Job(String jobName, int jobLength, int jobPriority) {
+        this.jobName = jobName;
+        this.jobLength = jobLength;
+        this.currentJobLength = jobLength;
+        this.jobPriority = jobPriority;
+        this.finalPriority = jobPriority;
+        entryTime = 0;
+        endTime = 0;
+        waitTime = 0;
+    }
+
     // Getters
     public String getJobName() {
         return jobName;
