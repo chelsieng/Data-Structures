@@ -1,10 +1,33 @@
-
 import java.util.ArrayList;
-import java.util.Map;
-
 
 public class HeapPriorityQueue {
-    private ArrayList<Map.Entry<Integer, Job>> heap;
+    public class Entry<K, V> {
+        private K key;
+        private V value;
+
+        public Entry() {
+            key = null;
+            value = null;
+        }
+
+        public K getKey() {
+            return key;
+        }
+
+        public V getValue() {
+            return value;
+        }
+
+        public void setKey(K key) {
+            this.key = key;
+        }
+
+        public void setValue(V value) {
+            this.value = value;
+        }
+    }
+
+    private ArrayList<Entry<Integer, Job>> heap;
     private long insertTime;
 
     // Default constructor
@@ -44,23 +67,23 @@ public class HeapPriorityQueue {
     }
 
     // get value of parent
-    private Job parent(int index) {
-        return heap.get(parentIndex(index)).getValue();
+    private Entry<Integer, Job> parent(int index) {
+        return heap.get(parentIndex(index));
     }
 
     // get value of left child
-    private Job leftChild(int index) {
-        return heap.get(leftChildIndex(index)).getValue();
+    private Entry<Integer, Job> leftChild(int index) {
+        return heap.get(leftChildIndex(index));
     }
 
     // get value of right child
-    private Job rightChild(int index) {
-        return heap.get(rightChildIndex(index)).getValue();
+    private Entry<Integer, Job> rightChild(int index) {
+        return heap.get(rightChildIndex(index));
     }
 
     // Swap value of two indices
     private void swap(int i, int j) {
-        Map.Entry<Integer, Job> temp = heap.get(i);
+        Entry<Integer, Job> temp = heap.get(i);
         heap.set(i, heap.get(j));
         heap.set(j, temp);
     }
@@ -75,11 +98,86 @@ public class HeapPriorityQueue {
         return heap.size();
     }
 
+    // moves the entry up, if necessary to restore heap property
+    public void heapUp(int index) {
+        while (hasParent(index)) {
+            if (parent(index).getKey() > heap.get(index).getKey()) {
+                swap(parentIndex(index), index);
+            } else if (parent(index).getKey().equals(heap.get(index).getKey()) && parent(index).getValue().getEntryTime() > heap.get(index).getValue().getEntryTime()) {
+                swap(parentIndex(index), index);
+            } else {
+                break;
+            }
+            index = parentIndex(index);
+        }
+    }
+
+    // moves the entry down, if necessary to restore heap property
+    public void heapDown() {
+        int index = 0;
+        while (hasLeftChild(index)) {
+            int smallerChildIndex = leftChildIndex(index);
+            if (hasRightChild(index) && rightChild(index).getKey() < leftChild(index).getKey()) {
+                smallerChildIndex = rightChildIndex(index);
+            } else if (hasRightChild(index) && rightChild(index).getKey().equals(leftChild(index).getKey()) &&
+                    rightChild(index).getValue().getEntryTime() < leftChild(index).getValue().getEntryTime()) {
+                smallerChildIndex = rightChildIndex(index);
+            }
+            if (heap.get(index).getKey() < heap.get(smallerChildIndex).getKey()) {
+                break;
+            } else {
+                swap(index, smallerChildIndex);
+            }
+            index = smallerChildIndex;
+        }
+    }
+
     // Insert method which insert element at the head of list
+    public void insert(int priority, Job job) {
+        Entry<Integer, Job> entry = new Entry<>();
+        entry.setKey(priority);
+        entry.setValue(job);
+        heap.add(entry);
+        job.setEntryTime(++insertTime);
+        heapUp(heap.size() - 1);
+    }
 
     // removeMin method which removes the element of highest priority
+    public Entry<Integer, Job> removeMin() {
+        if (heap.size() == 0) {
+            throw new IllegalArgumentException("Error: The queue is empty.");
+        }
+        Entry<Integer, Job> toRemove = heap.get(0);
+        swap(0, heap.size() - 1);
+        heap.remove(heap.size() - 1);
+        heapDown();
+        toRemove.getValue().setCurrentJobLength(toRemove.getValue().getCurrentJobLength() - 1);
+        return toRemove;
+    }
 
     // prioritizeMax method which finds the oldest element in the list
+    public void prioritizeMax() {
+        long lowestEntryTime = heap.get(0).getValue().getEntryTime();
+        Entry<Integer, Job> prioritize = heap.get(0);
+        // Find smallest entry time
+        for (Entry<Integer, Job> entry : heap) {
+            if (entry.getValue().getEntryTime() < lowestEntryTime) {
+                lowestEntryTime = entry.getValue().getEntryTime();
+                prioritize = entry;
+            }
+        }
+        //changes current priority to 1
+        prioritize.setKey(1);
+        //set final priority to 1
+        prioritize.getValue().setFinalPriority(1);
+        //heap up
+        heapUp(heap.indexOf(prioritize));
+    }
 
+    public void print() {
+        for (Entry<Integer, Job> entry : heap) {
+            System.out.println(entry.getValue().toString());
+        }
+    }
 
 }
