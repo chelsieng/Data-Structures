@@ -32,6 +32,18 @@ public class Job {
         waitTime = 0;
     }
 
+    // Copy Constructor
+    public Job(Job job){
+        this.jobName = job.jobName;
+        this.jobLength = job.jobLength;
+        this.currentJobLength = job.currentJobLength;
+        this.jobPriority = job.jobPriority;
+        this.finalPriority = job.finalPriority;
+        this.entryTime = job.entryTime;
+        this.endTime = job.endTime;
+        this.waitTime = job.waitTime;
+    }
+
     // Getters
     public String getJobName() {
         return jobName;
