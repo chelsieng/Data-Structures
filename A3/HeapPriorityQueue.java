@@ -123,10 +123,13 @@ public class HeapPriorityQueue {
                     rightChild(index).getValue().getEntryTime() < leftChild(index).getValue().getEntryTime()) {
                 smallerChildIndex = rightChildIndex(index);
             }
-            if (heap.get(index).getKey() < heap.get(smallerChildIndex).getKey()) {
-                break;
-            } else {
+            if (heap.get(index).getKey() > heap.get(smallerChildIndex).getKey()) {
                 swap(index, smallerChildIndex);
+            } else if (heap.get(index).getKey().equals(heap.get(smallerChildIndex).getKey()) &&
+                    heap.get(index).getValue().getEntryTime() > heap.get(smallerChildIndex).getValue().getEntryTime()) {
+                swap(index, smallerChildIndex);
+            } else {
+                break;
             }
             index = smallerChildIndex;
         }
@@ -175,6 +178,9 @@ public class HeapPriorityQueue {
     }
 
     public void print() {
+        if (heap.isEmpty()){
+            System.out.println("The priority queue is empty.");
+        }
         for (Entry<Integer, Job> entry : heap) {
             System.out.println(entry.getValue().toString());
         }
