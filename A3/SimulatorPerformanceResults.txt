@@ -1,0 +1,64 @@
+ ------------------------------ 
+| Unsorted List Priority Queue |
+ ------------------------------ 
+Current system time (cycles):3469
+Total number of jobs executed: 100 jobs
+Average process waiting time: 20 cycles
+Total number of priority changes: 3
+Actual system time needed to execute all jobs: 152 ms
+ --------------------- 
+| Heap Priority Queue |
+ --------------------- 
+Current system time (cycles):3469
+Total number of jobs executed: 100 jobs
+Average process waiting time: 20 cycles
+Total number of priority changes: 3
+Actual system time needed to execute all jobs: 74 ms
+ ------------------------------ 
+| Unsorted List Priority Queue |
+ ------------------------------ 
+Current system time (cycles):35535
+Total number of jobs executed: 1000 jobs
+Average process waiting time: 731 cycles
+Total number of priority changes: 33
+Actual system time needed to execute all jobs: 846 ms
+ --------------------- 
+| Heap Priority Queue |
+ --------------------- 
+Current system time (cycles):35535
+Total number of jobs executed: 1000 jobs
+Average process waiting time: 731 cycles
+Total number of priority changes: 33
+Actual system time needed to execute all jobs: 502 ms
+ ------------------------------ 
+| Unsorted List Priority Queue |
+ ------------------------------ 
+Current system time (cycles):360879
+Total number of jobs executed: 10000 jobs
+Average process waiting time: 7720 cycles
+Total number of priority changes: 333
+Actual system time needed to execute all jobs: 23088 ms
+ --------------------- 
+| Heap Priority Queue |
+ --------------------- 
+Current system time (cycles):360879
+Total number of jobs executed: 10000 jobs
+Average process waiting time: 7720 cycles
+Total number of priority changes: 333
+Actual system time needed to execute all jobs: 1324 ms
+ ------------------------------ 
+| Unsorted List Priority Queue |
+ ------------------------------ 
+Current system time (cycles):3655546
+Total number of jobs executed: 100000 jobs
+Average process waiting time: 76825 cycles
+Total number of priority changes: 3333
+Actual system time needed to execute all jobs: 4082624 ms
+ --------------------- 
+| Heap Priority Queue |
+ --------------------- 
+Current system time (cycles):3655546
+Total number of jobs executed: 100000 jobs
+Average process waiting time: 76825 cycles
+Total number of priority changes: 3333
+Actual system time needed to execute all jobs: 22092 ms
