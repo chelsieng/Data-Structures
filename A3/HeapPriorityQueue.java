@@ -29,11 +29,18 @@ public class HeapPriorityQueue {
 
     private ArrayList<Entry<Integer, Job>> heap;
     private long insertTime;
+    private int priorityChange;
 
     // Default constructor
     public HeapPriorityQueue() {
         heap = new ArrayList<>();
         insertTime = 0;
+        priorityChange = 0;
+    }
+
+    // Getter
+    public int getPriorityChange() {
+        return priorityChange;
     }
 
     // get index of parent
@@ -160,6 +167,9 @@ public class HeapPriorityQueue {
 
     // prioritizeMax method which finds the oldest element in the list
     public void prioritizeMax() {
+        if (heap.isEmpty()) {
+            return;
+        }
         long lowestEntryTime = heap.get(0).getValue().getEntryTime();
         Entry<Integer, Job> prioritize = heap.get(0);
         // Find smallest entry time
@@ -173,12 +183,13 @@ public class HeapPriorityQueue {
         prioritize.setKey(1);
         //set final priority to 1
         prioritize.getValue().setFinalPriority(1);
+        ++priorityChange;
         //heap up
         heapUp(heap.indexOf(prioritize));
     }
 
     public void print() {
-        if (heap.isEmpty()){
+        if (heap.isEmpty()) {
             System.out.println("The priority queue is empty.");
         }
         for (Entry<Integer, Job> entry : heap) {

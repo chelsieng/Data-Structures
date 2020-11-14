@@ -49,12 +49,14 @@ public class LinearPriorityQueue {
     private JobNode head;
     private int size;
     private long insertTime;
+    private int priorityChange;
 
     // Default constructor
     public LinearPriorityQueue() {
         head = null;
         size = 0;
         insertTime = 0;
+        priorityChange = 0;
     }
 
     // Getter
@@ -64,6 +66,10 @@ public class LinearPriorityQueue {
 
     public int size() {
         return size;
+    }
+
+    public int getPriorityChange() {
+        return priorityChange;
     }
 
     // Setter
@@ -115,7 +121,7 @@ public class LinearPriorityQueue {
     // prioritizeMax method which finds the oldest element in the list
     public void prioritizeMax() {
         if (head == null) {
-            throw new IllegalArgumentException("Error: The queue is empty.");
+            return;
         }
         JobNode current = head; // temp pointer to head
         long min = current.job.getEntryTime(); // lowest entry time of job
@@ -130,6 +136,7 @@ public class LinearPriorityQueue {
         }
         toFind.setPriority(1); // changes current priority to 1
         toFind.job.setFinalPriority(1); // set final priority of job to 1
+        ++priorityChange;
     }
 
     // Return true if priority queue is empty
