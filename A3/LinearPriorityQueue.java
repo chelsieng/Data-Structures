@@ -2,8 +2,8 @@ public class LinearPriorityQueue {
     // Job node class to store object and next
     public class JobNode {
         private int priority;
-        private Job job = new Job();
-        private JobNode next;
+        private Job job;
+        private JobNode next; // pointer to next node
 
         // Default constructor
         public JobNode() {
@@ -46,10 +46,10 @@ public class LinearPriorityQueue {
         }
     }
 
-    private JobNode head;
-    private int size;
-    private long insertTime;
-    private int priorityChange;
+    private JobNode head; // head of list
+    private int size; // size of list
+    private long insertTime; // entry time of node
+    private int priorityChange; // number of times at which priority was changed
 
     // Default constructor
     public LinearPriorityQueue() {
@@ -81,8 +81,8 @@ public class LinearPriorityQueue {
     public void insert(int priority, Job job) {
         JobNode newHead = new JobNode();
         newHead.priority = priority; // Assigning priority to new node
-        newHead.job = job; // Assigning object to new node
-        newHead.next = head; // set next of new node to next
+        newHead.job = job; // Assigning job object to new node
+        newHead.next = head; // set next of new node to head
         head = newHead; // set head of list to new node
         job.setEntryTime(++insertTime); // increment entry time
         size++; // increase size
@@ -91,24 +91,27 @@ public class LinearPriorityQueue {
 
     // removeMin method which removes the element of highest priority
     public JobNode removeMin() {
+        // if list is empty, throw exception
         if (head == null) {
             throw new IllegalArgumentException("Error: The queue is empty.");
         }
         JobNode current = head; // temp pointer
-        int min = current.priority; // min priority
+        int min = current.priority; // highest priority
         JobNode toRemove = current; // node to be removed
         JobNode beforeToRemove = current; // node before node to be removed
         while (current.next != null) {
+            // node has higher priority than this node
             if (min >= current.next.priority) {
-                min = current.next.priority;
-                beforeToRemove = current;
-                toRemove = current.next;
+                min = current.next.priority; // set new highest priority
+                beforeToRemove = current; // set new node to previous node of node to be removed
+                toRemove = current.next; // set new node to be removed
             }
             current = current.next; // pointer moving forward
         }
+        // if node to be removed is at the head of the list
         if (toRemove == head) {
-            head = head.next;
-            toRemove.next = null;
+            head = head.next; // set new head to node next to current head
+            toRemove.next = null; // set next of head to be removed to null
         }
         // Removing element from the list
         beforeToRemove.next = toRemove.next;
@@ -120,6 +123,7 @@ public class LinearPriorityQueue {
 
     // prioritizeMax method which finds the oldest element in the list
     public void prioritizeMax() {
+        // If list is empty
         if (head == null) {
             return;
         }
@@ -128,9 +132,10 @@ public class LinearPriorityQueue {
         JobNode toFind = current; // node to be found
         // Finding oldest node in list
         while (current.next != null) {
+            // if there is a lower entry time
             if (min > current.next.job.getEntryTime()) {
-                min = current.next.job.getEntryTime();
-                toFind = current.next;
+                min = current.next.job.getEntryTime(); // set new entry time
+                toFind = current.next; // set new node to find
             }
             current = current.next; //pointer moving forward
         }
@@ -144,6 +149,7 @@ public class LinearPriorityQueue {
         return size == 0;
     }
 
+    // Display content of queue
     public void print() {
         if (head == null) {
             System.out.println("The priority queue is empty.");
