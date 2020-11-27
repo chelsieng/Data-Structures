@@ -22,6 +22,14 @@ public class Job {
 
     // Parameterized constructor
     public Job(String jobName, int jobLength, int jobPriority) {
+        if (jobLength < 1 || jobLength > 70) {
+            System.out.println("Error: invalid length of job! Program will terminate now!");
+            System.exit(-1);
+        }
+        if (jobPriority < 1 || jobPriority > 40) {
+            System.out.println("Error: invalid value of priority! Program will terminate now!");
+            System.exit(-1);
+        }
         this.jobName = jobName;
         this.jobLength = jobLength;
         this.currentJobLength = jobLength;
@@ -33,7 +41,7 @@ public class Job {
     }
 
     // Copy Constructor
-    public Job(Job job){
+    public Job(Job job) {
         this.jobName = job.jobName;
         this.jobLength = job.jobLength;
         this.currentJobLength = job.currentJobLength;
