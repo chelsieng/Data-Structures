@@ -13,6 +13,3 @@ Number of *: 24    Runtime: 1387230
 
 
 As the number * increases, the runtime increases exponentially
-
-Number of *: 4    Runtime: 8
-Number of *: 8    Runtime: 175
