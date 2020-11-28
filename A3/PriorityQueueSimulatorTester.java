@@ -108,7 +108,7 @@ public class PriorityQueueSimulatorTester {
         while (!heapPriorityQueue.isEmpty()) {
             entry = heapPriorityQueue.removeMin(); // executing jobs
             ++currentTime;
-            System.out.println("Now executing " + entry.getValue().toString());
+            System.out.println("Heap Priority Queue | Now executing " + entry.getValue().toString());
             // if job length > 0, insert back in PQ
             if (entry.getValue().getCurrentJobLength() > 0) {
                 heapPriorityQueue.insert(entry.getKey(), entry.getValue());
