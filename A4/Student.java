@@ -99,14 +99,16 @@ public class Student {
         }
     }
 
-    private long ID;
+    private long SIDC;
     private String familyName;
     private String firstName;
     private DOB dateOfBirth;
+    private int next;
+    private int previous;
 
     // Default constructor
     public Student() {
-        ID = 0;
+        SIDC = 0;
         familyName = "";
         firstName = "";
         dateOfBirth = new DOB();
@@ -114,7 +116,7 @@ public class Student {
 
     // Default constructor
     public Student(String firstName, String familyName, DOB dateOfBirth) {
-        ID = 0;
+        this.SIDC = 0;
         this.familyName = familyName;
         this.firstName = firstName;
         this.dateOfBirth = dateOfBirth;
@@ -133,8 +135,16 @@ public class Student {
         return dateOfBirth;
     }
 
-    public long getID() {
-        return ID;
+    public long getSIDC() {
+        return SIDC;
+    }
+
+    public int getNext() {
+        return next;
+    }
+
+    public int getPrevious() {
+        return previous;
     }
 
     // Setters
@@ -150,14 +160,22 @@ public class Student {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public void setID(long ID) {
-        this.ID = ID;
+    public void setSIDC(long ID) {
+        this.SIDC = ID;
+    }
+
+    public void setNext(int next) {
+        this.next = next;
+    }
+
+    public void setPrevious(int previous) {
+        this.previous = previous;
     }
 
     // String representation of student
     // E.g: ID: 40072839; Name: John Smith; DOB: 31/12/1995
     public String toString() {
-        return "ID: " + ID + "\tName: " + firstName + " " + familyName + "\tDOB: " + dateOfBirth.toString();
+        return "ID: " + SIDC + "\tName: " + firstName + " " + familyName + "\tDOB: " + dateOfBirth.toString();
     }
 
 }
