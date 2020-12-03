@@ -23,6 +23,13 @@ public class Student {
             }
         }
 
+        // Copy constructor
+        public DOB(DOB dob) {
+            this.day = dob.day;
+            this.month = dob.month;
+            this.year = dob.year;
+        }
+
         // Getters
         public int getDay() {
             return day;
@@ -114,12 +121,20 @@ public class Student {
         dateOfBirth = new DOB();
     }
 
-    // Default constructor
+    // Parameterized constructor
     public Student(String firstName, String familyName, DOB dateOfBirth) {
         this.SIDC = 0;
         this.familyName = familyName;
         this.firstName = firstName;
         this.dateOfBirth = dateOfBirth;
+    }
+
+    // Copy constructor
+    public Student(Student student) {
+        this.SIDC = student.SIDC;
+        this.familyName = student.familyName;
+        this.firstName = student.firstName;
+        this.dateOfBirth = new DOB(student.dateOfBirth.month, student.dateOfBirth.day, student.dateOfBirth.year);
     }
 
     // Getters
