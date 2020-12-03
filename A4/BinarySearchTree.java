@@ -73,7 +73,7 @@ public class BinarySearchTree {
         }
     }
 
-    private Entry root; // treeTree implemented as array
+    private Entry root; // root of binary search tree
     private int size; // pointer of toRemove index
     private Sequence keys;
 
