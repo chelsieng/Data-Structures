@@ -1,13 +1,13 @@
 public class BinarySearchTree {
     public static class Entry {
-        private Long key; // key is the priority
+        private long key; // key is the priority
         private Student value; // value is the job object
         private int height; // height of entry
         private Entry left, right; // child of parent
 
         // Default constructor
         public Entry() {
-            key = null;
+            key = 0;
             value = null;
             height = 1;
             left = null;
@@ -31,7 +31,7 @@ public class BinarySearchTree {
         }
 
         // Getter
-        public Long getKey() {
+        public long getKey() {
             return key;
         }
 
@@ -52,7 +52,7 @@ public class BinarySearchTree {
         }
 
         // Setter
-        public void setKey(Long key) {
+        public void setKey(long key) {
             this.key = key;
         }
 
@@ -75,11 +75,20 @@ public class BinarySearchTree {
 
     private Entry root; // treeTree implemented as array
     private int size; // pointer of toRemove index
+    private Sequence keys;
 
     // Default constructor
     public BinarySearchTree() {
         root = null;
         size = 0;
+        keys = new Sequence();
+    }
+
+    //Parameterized constructor
+    public BinarySearchTree(int size) {
+        root = null;
+        size = 0;
+        keys = new Sequence(size);
     }
 
     // Getter
@@ -96,10 +105,43 @@ public class BinarySearchTree {
         this.root = root;
     }
 
+    private int binarySearch(long[] entries, long key) {
+        int left = 0, right = entries.length - 1; //pointer at the beginning and end of list
+        while (left <= right) {
+            int mid = left + (right - left) / 2; // midpoint of l and r
+            // Check if key is present at midpoint
+            if (entries[mid] == key) {
+                return mid;
+            }
+            // If key is greater, ignore left half
+            if (entries[mid] < key) {
+                left = mid + 1;
+            }
+            // If key is smaller, ignore right half
+            else {
+                right = mid - 1;
+            }
+        }
+        // key not present
+        return -1;
+    }
+
     // return all the keys in a sorted sequence
     public long[] allKeys(BinarySearchTree tree) {
-        long[] keys = new long[tree.size()];
-        return keys;
+        inOrder(tree.root);
+        return keys.getEntries();
+    }
+
+    public void inOrder(Entry root) {
+        if (root == null) {
+            return;
+        }
+        inOrder(root.left);
+        int location = binarySearch(keys.getEntries(), root.key);
+        if (location == -1) {
+            keys.add(root.key);
+        }
+        inOrder(root.right);
     }
 
     // add an entry for the given key and value
@@ -237,5 +279,42 @@ public class BinarySearchTree {
             }
         }
         return toFind.getValue();
+    }
+
+    // return the key for the successor of key
+    public long nextKey(BinarySearchTree tree, long key) {
+        long[] entries = allKeys(tree);
+        int location = binarySearch(entries, key);
+        int nextIndex = location + 1;
+        if (nextIndex == entries.length) {
+            System.out.println("Error: Successor of key does not exist!");
+            return -1;
+        }
+        return entries[nextIndex];
+    }
+
+    // return the key for the predecessor of key;
+    public long prevKey(BinarySearchTree tree, long key) {
+        long[] entries = allKeys(tree);
+        int location = binarySearch(entries, key);
+        int prevIndex = location - 1;
+        if (prevIndex < 0) {
+            System.out.println("Error: Predecessor of key does not exist!");
+            return -1;
+        }
+        return entries[prevIndex];
+    }
+
+    // returns the number of keys that are within the specified range of the two keys key1 and key2
+    public int rangeKey(long key1, long key2) {
+        long[] entries = allKeys(this);
+        int from = binarySearch(entries, key1);
+        int to = binarySearch(entries, key2);
+        if (from > to) {
+            int temp = to;
+            to = from;
+            from = temp;
+        }
+        return (to - from) - 1;
     }
 }
