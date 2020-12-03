@@ -1,51 +1,13 @@
 import java.util.Arrays;
 
-public class MinHeap {
-    public static class Entry {
-        private Long key; // key is the priority
-        private Student value; // value is the job object
-
-        // Default constructor
-        public Entry() {
-            key = null;
-            value = null;
-        }
-
-        // Parameterized Constructor
-        public Entry(long key, Student value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        // Getter
-        public Long getKey() {
-            return key;
-        }
-
-        public Student getValue() {
-            return value;
-        }
-
-        // Setter
-        public void setKey(long key) {
-            this.key = key;
-        }
-
-        public void setValue(Student value) {
-            this.value = value;
-        }
-
-    }
-
-    private Entry entry; // key: student ID, value: student object
-    private Entry[] heap; // array of entries
-    private final int CAPACITY = 1000; // max capacity of heap
-    private int size; // size of heap
-    private int index; // pointer
+public class MinHeap extends IntelligentSIDC implements ADT {
+    protected Entry[] heap; // array of entries
+    protected final int CAPACITY = 1000; // max capacity of heap
+    protected int size; // size of heap
+    protected int index; // pointer
 
     // Default constructor
     public MinHeap() {
-        entry = new Entry();
         heap = new Entry[0];
         size = 0;
         index = 0;
@@ -116,7 +78,7 @@ public class MinHeap {
     }
 
     // moves the entry up, if necessary to restore heap property
-    private void heapUp(int index) {
+    protected void heapUp(int index) {
         // as long as there is a parent
         while (hasParent(index)) {
             // if parent index has lower key than index, swap
@@ -130,7 +92,7 @@ public class MinHeap {
     }
 
     // moves the entry down, if necessary to restore heap property
-    private void heapDown() {
+    protected void heapDown() {
         int index = 0;
         // as long as there is a left child
         while (hasLeftChild(index)) {
@@ -149,61 +111,61 @@ public class MinHeap {
     }
 
     // return all the keys in a sequence
-    public long[] allKeys(MinHeap minHeap) {
-        long[] keys = new long[minHeap.size()];
-        mergeSort(minHeap.heap); // sort heap
+    public long[] allKeys(IntelligentSIDC minHeap) {
+        long[] keys = new long[size()];
+        mergeSort(heap); // sort heap
         for (int i = 0; i < keys.length; i++) {
-            keys[i] = minHeap.heap[i].getKey(); // add all keys in array of keys
+            keys[i] = heap[i].getKey(); // add all keys in array of keys
         }
-        minHeap.heapDown(); // restore heap property
+        heapDown(); // restore heap property
         return keys;
     }
 
     // add an entry for the given key and value
-    public void add(MinHeap minHeap, Long key, Student value) {
+    public void add(IntelligentSIDC minHeap, Long key, Student value) {
         // Validate capacity of heap
-        if (capacityReached(minHeap)) {
+        if (capacityReached()) {
             return;
         }
         Entry entry = new Entry();
         entry.setKey(key);
         entry.setValue(value);
-        heap[minHeap.index] = entry; // add entry at the end of heap
-        minHeap.heapUp(minHeap.index); // restore heap property
-        ++minHeap.index; // move pointer
-        ++minHeap.size; // update size of heap
+        heap[index] = entry; // add entry at the end of heap
+        heapUp(index); // restore heap property
+        ++index; // move pointer
+        ++size; // update size of heap
 
     }
 
-    // remove the entry for the given key
-    public Entry remove(MinHeap minHeap, long key) {
+//    // remove the entry for the given key
+    public Entry remove(IntelligentSIDC minHeap, long key) {
         // If removing when list is empty
-        if (minHeap.size() == 0) {
+        if (size() == 0) {
             throw new IllegalArgumentException("Cannot remove from an empty list!");
         }
-        mergeSort(minHeap.heap); // sort heap
-        int location = binarySearch(minHeap.heap, key); // get key
+        mergeSort(heap); // sort heap
+        int location = binarySearch(heap, key); // get key
         // If not found
         if (location == -1) {
             System.out.println("Error: Key not found!");
             return null;
         }
-        minHeap.swap(0, location); // move key at the top
-        Entry removed = minHeap.heap[0];
-        minHeap.heap[0] = minHeap.heap[minHeap.heap.length - 1]; // removed and replaced with last element of heap
-        minHeap.heapDown(); // restore property
-        --minHeap.size; // update size of heap
-        --minHeap.index; // update pointer
+        swap(0, location); // move key at the top
+        Entry removed = heap[0];
+        heap[0] = heap[heap.length - 1]; // removed and replaced with last element of heap
+        heapDown(); // restore property
+        --size; // update size of heap
+        --index; // update pointer
         return removed;
     }
 
     // returns true if full capacity reached
-    private boolean capacityReached(MinHeap heap) {
-        if (heap.size() == CAPACITY) {
+    private boolean capacityReached() {
+        if (size() == CAPACITY) {
             System.out.println("Failed: The list reached its capacity!");
             return true;
-        } else if (heap.size() == index) {
-            heap.heap = Arrays.copyOf(heap.heap, heap.size() + 1);
+        } else if (heap.length == index) {
+            heap = Arrays.copyOf(heap, size() + 1);
         }
         return false;
     }
@@ -267,11 +229,11 @@ public class MinHeap {
         while (left <= right) {
             int mid = left + (right - left) / 2; // midpoint of l and r
             // Check if key is present at midpoint
-            if (entries[mid].key == key) {
+            if (entries[mid].getKey() == key) {
                 return mid;
             }
             // If key is greater, ignore left half
-            if (entries[mid].key < key) {
+            if (entries[mid].getKey() < key) {
                 left = mid + 1;
             }
             // If key is smaller, ignore right half
@@ -284,44 +246,44 @@ public class MinHeap {
     }
 
     // return the values of the given key
-    public Student getValues(MinHeap minHeap, long key) {
-        mergeSort(minHeap.heap); // sort list
-        int location = binarySearch(minHeap.heap, key); // find key
+    public Student getValues(IntelligentSIDC minHeap, long key) {
+        mergeSort(heap); // sort list
+        int location = binarySearch(heap, key); // find key
         // key not found
         if (location == -1) {
             System.out.println("Error: Student does not exist!");
             return null;
         }
-        Student toFind = minHeap.heap[location].getValue();
+        Student toFind = heap[location].getValue();
         heapDown(); // restore property
         return toFind;
     }
 
     // return the key for the successor of key
-    public long nextKey(MinHeap minHeap, long key) {
-        mergeSort(minHeap.heap);
-        int location = binarySearch(minHeap.heap, key);
+    public long nextKey(IntelligentSIDC minHeap, long key) {
+        mergeSort(heap);
+        int location = binarySearch(heap, key);
         int nextIndex = location + 1;
-        if (nextIndex == minHeap.size()) {
+        if (nextIndex == size()) {
             System.out.println("Error: Successor of key does not exist!");
             return -1;
         }
-        long found = minHeap.heap[nextIndex].key;
-        minHeap.heapDown();
+        long found = heap[nextIndex].getKey();
+        heapDown();
         return found;
     }
 
     // return the key for the predecessor of key;
-    public long prevKey(MinHeap minHeap, long key) {
-        mergeSort(minHeap.heap);
-        int location = binarySearch(minHeap.heap, key);
+    public long prevKey(IntelligentSIDC minHeap, long key) {
+        mergeSort(heap);
+        int location = binarySearch(heap, key);
         int prevIndex = location - 1;
         if (prevIndex < 0) {
             System.out.println("Error: Predecessor of key does not exist!");
             return -1;
         }
-        long found = minHeap.heap[prevIndex].key;
-        minHeap.heapDown();
+        long found = heap[prevIndex].getKey();
+        heapDown();
         return found;
     }
 
@@ -330,12 +292,75 @@ public class MinHeap {
         mergeSort(heap);
         int from = binarySearch(heap, key1);
         int to = binarySearch(heap, key2);
+        if (from > to) {
+            int temp = to;
+            to = from;
+            from = temp;
+        }
         return (to - from) - 1;
     }
 
     public void print() {
         for (int i = 0; i < size(); i++) {
-            System.out.println("(" + heap[i].key + ", " + heap[i].value.getFirstName() + ")");
+            System.out.println("(" + heap[i].getKey() + ", " + heap[i].getValue().getFirstName() + ")");
         }
     }
+
+//    public static void main(String[] args) {
+//        Student s1 = new Student("Chelsie", "Ng", new Student.DOB(12, 18, 1999));
+//        Student s2 = new Student("Nigel", "Yong", new Student.DOB(12, 11, 1999));
+//        Student s3 = new Student("Stella", "Lo", new Student.DOB(1, 30, 1972));
+//        Student s4 = new Student("Kelvin", "Lo", new Student.DOB(10, 14, 1995));
+//        Student s5 = new Student("Chelsie", "Ng", new Student.DOB(12, 18, 1999));
+//        Student s6 = new Student("Nigel", "Yong", new Student.DOB(12, 11, 1999));
+//        Student s7 = new Student("Stella", "Lo", new Student.DOB(1, 30, 1972));
+//        Student s8 = new Student("Kelvin", "Lo", new Student.DOB(10, 14, 1995));
+//        Student s9 = new Student("Chelsie", "Ng", new Student.DOB(12, 18, 1999));
+//        Student s10 = new Student("Nigel", "Yong", new Student.DOB(12, 11, 1999));
+//        long key1 = 40071692;
+//        long key2 = 40071693;
+//        long key3 = 40071694;
+//        long key4 = 40071690;
+//        long key5 = 40071691;
+//        long key6 = 40071699;
+//        long key7 = 40071698;
+//        long key8 = 40071697;
+//        long key9 = 40071696;
+//        long key10 = 40071695;
+//        MinHeap MinHeap = new MinHeap(10);
+//        MinHeap.add(MinHeap, key1, s1);
+//        MinHeap.add(MinHeap, key2, s2);
+//        MinHeap.add(MinHeap, key3, s3);
+//        MinHeap.add(MinHeap, key4, s4);
+//        MinHeap.add(MinHeap, key5, s5);
+//        MinHeap.add(MinHeap, key6, s6);
+//        MinHeap.add(MinHeap, key7, s7);
+//        MinHeap.add(MinHeap, key8, s8);
+//        MinHeap.add(MinHeap, key9, s9);
+//        MinHeap.add(MinHeap, key10, s10);
+//        MinHeap.print();
+//        MinHeap.remove(MinHeap, 40071692);
+//        System.out.println("----------------------");
+//        MinHeap.print();
+//        long k = 02;
+//        MinHeap.add(MinHeap, k, new Student());
+//        System.out.println("----------------------");
+//        MinHeap.print();
+//        long k2 = 9;
+//        long k3 = 10;
+//        MinHeap.add(MinHeap, k2, new Student());
+//        MinHeap.add(MinHeap, k3, new Student());
+//        System.out.println("----------------------");
+//        MinHeap.print();
+//        MinHeap.add(MinHeap, key1, new Student());
+//        Random random = new Random();
+//        int num = random.nextInt(10000000) + 10000000;
+//        for (int i = 0; i < 999; i++) {
+//            long key = num;
+//            MinHeap.add(MinHeap, key, new Student());
+//            num = random.nextInt(10000000) + 10000000;
+//        }
+//        MinHeap.add(MinHeap, key1, new Student());
+//    }
+
 }
