@@ -19,5 +19,6 @@ public interface ADT {
     // returns the number of keys that are within the specified range of the two keys key1 and key2
     int rangeKey(long key1, long key2);
 
+    // get size of ADT
     int size();
 }
