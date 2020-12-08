@@ -3,7 +3,7 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.Random;
 
-public class Version1 {
+public class RecursiveMethod {
     public static void RevealStr(String s, int index) {
         StringBuilder str = new StringBuilder(s);
         if (index == s.length()) {

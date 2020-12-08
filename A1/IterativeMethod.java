@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 import java.util.Random;
 import java.util.Stack;
 
-public class Version2 {
+public class IterativeMethod {
     public static void RevealStr(String s) {
         Stack<String> stringStack = new Stack<String>();
         stringStack.push(s); //put s in stack
