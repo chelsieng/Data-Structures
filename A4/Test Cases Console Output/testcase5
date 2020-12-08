@@ -1,0 +1,72 @@
+Test Case 5:
+1.	Generating unique 20,000 keys to CSTA_test_files/CSTA_test_file5.txt:
+
+1.1	Adding 20,000 keys with new Student Object
+Warning: The list reached its capacity!
+---IntelligentSIDC Grown: Data transferred---
+Results:
+Size:1100
+
+2.	Writing all keys in sorted sequence to CSTA_test_files/SORTED_CSTA_test_file5.txt
+Results:
+SORTED_CSTA_test_file4.txt created successfully.
+
+3.	Get next key of existing key from file
+Results:
+Next key: 10279102
+
+4.	Get next key of non-existing key from file
+Results:
+Error: Key does not exist!
+
+5.	Get next key of last key from sorted file
+Results:
+Error: Key does not exist!
+
+7.	Get previous key of existing key from file
+Results:
+Previous key: 10259392
+
+8.	Get previous key of non-existing key from file
+Results:
+Error: Key does not exist!
+
+6.	Get previous key of first key from sorted file
+Results:
+Error: Predecessor of key does not exist!
+
+9.	Get number of keys in between first key and last key from sorted file
+Results:
+Error: One of the keys does not exist!
+0
+
+10.	Get number of keys in between first key and second key from sorted file
+Results:
+0
+
+11.	Get number of keys in between fourth key and first key from file
+Results:
+2
+
+12.	Get value associated with existing key from file
+Results:
+ID: 10259392	Name: Frank Anderson
+
+13.	Get value associated with non-existing key from file
+Results:
+Error: Student does not exist!
+
+14.	Remove an existing key from file
+Results:
+Error: Entry was not found!
+Size:1100
+
+15.	Remove a non-existing key from file
+Results:
+Error: Entry was not found!
+Size: 1100
+
+16.	Removing keys until list is empty
+Results:
+---IntelligentSIDC Shrinked: Data transferred---
+Size: 0

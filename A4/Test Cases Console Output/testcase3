@@ -1,0 +1,28 @@
+Test Case 3:
+From CSTA_test_files/CSTA_test_file2.txt:
+
+1.	Adding 500,000 keys with new Student Object
+Results:
+Warning: The list reached its capacity!
+---IntelligentSIDC Grown: Data transferred---
+Size after excluding duplicates:340856
+
+2.	Writing all keys in sorted sequence to CSTA_test_files/SORTED_CSTA_test_file2.txt
+Results:
+SORTED_CSTA_test_file2.txt created successfully.
+
+3.	Get next key of existing key from sorted file
+Results:
+726
+
+4.	Get next key of first key from sorted file
+Results:
+Error: Successor of key does not exist!
+
+5.	Get previous key of existing key from sorted file
+Results:
+339
+
+6.	Get previous key of last key from sorted file
+Results:
+Error: Predecessor of key does not exist!

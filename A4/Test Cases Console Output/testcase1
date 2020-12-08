@@ -1,0 +1,25 @@
+Test Case 1:
+From CSTA_test_files/CSTA_test_file3.txt:
+
+1.	Adding 1,000,000 keys with new Student Object
+Results:
+Warning: The list reached its capacity!
+---IntelligentSIDC Grown: Data transferred---
+Size after excluding duplicates:597267
+
+2.	Remove an existing key from file
+Results:
+Size:597266
+
+3.	Remove an non-existing key from file
+Results:
+Error: Entry was not found!
+Size: 597266
+
+4.	Get Value associated with existing key from file
+Results:
+ID: 34117816	Name: Jonathan Garcia
+
+5.	Get Value associated with non-existing key from file
+Results:
+Error: Student does not exist!

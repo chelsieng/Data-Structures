@@ -1,0 +1,24 @@
+Test Case 4:
+1.	Generating unique 150,000 keys to CSTA_test_files/CSTA_test_file4.txt:
+
+1.1	Adding 150,000 keys with new Student Object
+Warning: The list reached its capacity!
+---IntelligentSIDC Grown: Data transferred---
+Results:
+Size:150000
+
+2.	Writing all keys in sorted sequence to CSTA_test_files/SORTED_CSTA_test_file4.txt
+Results:
+SORTED_CSTA_test_file4.txt created successfully.
+
+3.	Get number of keys in between first key and last key from sorted file
+Results:
+Number of keys: 149998
+
+4.	Get number of keys in between first key and second key from sorted file
+Results:
+Number of keys: 0
+
+5.	Get number of keys in between fourth key and first key from file
+Results:
+Number of keys: 2
