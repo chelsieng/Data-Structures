@@ -10,11 +10,11 @@ public class IntelligentSIDC {
     //Parameterized constructor
     public IntelligentSIDC(int size) {
         SetSIDCThreshold(size);
-        if (SDICThreshold <= 1000) {
-            adt_type = new MinHeap(size);
-        } else {
-            adt_type = new BinarySearchTree(size);
-        }
+        adt_type = new MinHeap(size);
+    }
+
+    public void setAdt_type(ADT adt_type) {
+        this.adt_type = adt_type;
     }
 
     // get size of IntelligentSIDC
@@ -22,23 +22,72 @@ public class IntelligentSIDC {
         return adt_type.size();
     }
 
+    public void setSize(int size) {
+        adt_type.setSize(size);
+    }
+
     // Determines what data types or data structures will be used
     public void SetSIDCThreshold(int size) {
         SDICThreshold = size;
     }
 
+    // randomly generates new non-existing key of 8 digits
+    public long generate() {
+        return adt_type.generate();
+    }
+
+    // return all keys as a sorted sequence
     public long[] allKeys(IntelligentSIDC intelligentSIDC) {
         return adt_type.allKeys(intelligentSIDC);
     }
 
     // add an entry for the given key and value
-    public void add(IntelligentSIDC intelligentSIDC, Long key, Student value) {
+    public void add(IntelligentSIDC intelligentSIDC, long key, Student value) {
+        if (adt_type.capacityReached()) {
+            grow(intelligentSIDC);
+        }
         adt_type.add(intelligentSIDC, key, value);
+    }
+
+    // change to bigger adt
+    private void grow(IntelligentSIDC intelligentSIDC) {
+        IntelligentSIDC binarySearchTree = new BinarySearchTree(SDICThreshold);
+        Entry entry = adt_type.remove(intelligentSIDC);
+        while (entry != null) {
+            binarySearchTree.add(binarySearchTree, entry.getKey(), entry.getValue());
+            entry = adt_type.remove(intelligentSIDC);
+        }
+        System.out.println("---IntelligentSIDC Grown: Data transferred---");
+        setAdt_type((ADT) binarySearchTree);
     }
 
     // remove the entry for the given key
     public Entry remove(IntelligentSIDC intelligentSIDC, long key) {
-        return adt_type.remove(intelligentSIDC, key);
+        if (intelligentSIDC.size() == 1001) {
+            Entry removed = adt_type.remove(intelligentSIDC, key);
+            if (removed == null) {
+                return null;
+            }
+            BinarySearchTree binarySearchTree = new BinarySearchTree();
+            if (adt_type.getClass() == binarySearchTree.getClass()) {
+                shrink(intelligentSIDC);
+            }
+            return removed;
+        } else {
+            return adt_type.remove(intelligentSIDC, key);
+        }
+    }
+
+    // change to smaller ADT
+    private void shrink(IntelligentSIDC intelligentSIDC) {
+        IntelligentSIDC heap = new MinHeap(intelligentSIDC.size());
+        long[] allKeys = intelligentSIDC.allKeys(intelligentSIDC);
+        for (int i = intelligentSIDC.size() - 1; i >= 0; i--) {
+            Student student = intelligentSIDC.getValues(intelligentSIDC, allKeys[i]);
+            heap.add(heap, allKeys[i], student);
+        }
+        System.out.println("---IntelligentSIDC Shrinked: Data transferred---");
+        setAdt_type((ADT) heap);
     }
 
     // return the values of the given key

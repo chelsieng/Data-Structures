@@ -5,12 +5,14 @@ public class MinHeap extends IntelligentSIDC implements ADT {
     protected final int CAPACITY = 1000; // max capacity of heap
     protected int size; // size of heap
     protected int index; // pointer
+    private int removeIndex;
 
     // Default constructor
     public MinHeap() {
         heap = new Entry[0];
         size = 0;
         index = 0;
+        removeIndex = 0;
     }
 
     // Parameterized constructor
@@ -18,11 +20,16 @@ public class MinHeap extends IntelligentSIDC implements ADT {
         heap = new Entry[CAPACITY];
         this.size = 0;
         index = 0;
+        removeIndex = 0;
     }
 
     // get size of heap
     public int size() {
         return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 
     // get index of parent
@@ -100,9 +107,9 @@ public class MinHeap extends IntelligentSIDC implements ADT {
             // if there is a right child and right child has highest key than smaller child index, swap
             if (hasRightChild(index) && rightChild(index).getKey() < leftChild(index).getKey()) {
                 smallerChildIndex = rightChildIndex(index);
-            }  // if index have lower key than smaller child index, swap
+            }
             if (heap[index].getKey() > heap[smallerChildIndex].getKey()) {
-                swap(index, smallerChildIndex);
+                swap(index, smallerChildIndex); // if index have lower key than smaller child index, swap
             } else {
                 break;
             }
@@ -121,23 +128,39 @@ public class MinHeap extends IntelligentSIDC implements ADT {
         return keys;
     }
 
+    // Randomly generates new keys
+    public long generate() {
+        long min = 10000000;
+        long max = 99999999;
+        long newKey = (long) (Math.random() * (max - min + 1) + min);
+        int location = binarySearch(this.heap, newKey);
+        while (location != -1) {
+            newKey = (long) (Math.random() * (max - min + 1) + min);
+            location = binarySearch(this.heap, newKey);
+        }
+        return newKey;
+    }
+
+
     // add an entry for the given key and value
-    public void add(IntelligentSIDC minHeap, Long key, Student value) {
-        // Validate capacity of heap
-        if (capacityReached()) {
+    public void add(IntelligentSIDC minHeap, long key, Student value) {
+        int location = binarySearch(heap, key);
+        // Checking for duplicates
+        if (location != -1) {
+//            System.out.println("Duplicate keys not allowed");
             return;
         }
         Entry entry = new Entry();
         entry.setKey(key);
         entry.setValue(value);
         heap[index] = entry; // add entry at the end of heap
-        heapUp(index); // restore heap property
+        // heap property restored
+        heapUp(index);
         ++index; // move pointer
         ++size; // update size of heap
-
     }
 
-//    // remove the entry for the given key
+    // remove the entry for the given key
     public Entry remove(IntelligentSIDC minHeap, long key) {
         // If removing when list is empty
         if (size() == 0) {
@@ -147,22 +170,37 @@ public class MinHeap extends IntelligentSIDC implements ADT {
         int location = binarySearch(heap, key); // get key
         // If not found
         if (location == -1) {
+            System.out.println(key);
             System.out.println("Error: Key not found!");
             return null;
         }
-        swap(0, location); // move key at the top
-        Entry removed = heap[0];
-        heap[0] = heap[heap.length - 1]; // removed and replaced with last element of heap
+//        swap(0, location); // move key at the top
+        Entry removed = heap[location];
+        heap[location] = heap[this.size() - 1]; // removed and replaced with last element of heap
         heapDown(); // restore property
         --size; // update size of heap
         --index; // update pointer
         return removed;
     }
 
+    // remove the entry for transfer of data
+    public Entry remove(IntelligentSIDC minHeap) {
+        // If removing when list is empty
+        if (size() == 0) {
+            return null;
+        }
+        Entry removed = heap[size - 1]; //remove last element
+        heap[size - 1] = null;
+        --size; // update size of heap
+        --index; // update pointer
+        ++removeIndex; // update remove index
+        return removed;
+    }
+
     // returns true if full capacity reached
-    private boolean capacityReached() {
+    public boolean capacityReached() {
         if (size() == CAPACITY) {
-            System.out.println("Failed: The list reached its capacity!");
+            System.out.println("Warning: The list reached its capacity!");
             return true;
         } else if (heap.length == index) {
             heap = Arrays.copyOf(heap, size() + 1);
@@ -182,12 +220,18 @@ public class MinHeap extends IntelligentSIDC implements ADT {
             // Split left part
             Entry[] left = new Entry[mid];
             for (int i = 0; i < mid; i++) {
+                if (array[i] == null) {
+                    continue;
+                }
                 left[i] = array[i];
             }
 
             // Split right part
             Entry[] right = new Entry[array.length - mid];
             for (int i = mid; i < array.length; i++) {
+                if (array[i] == null) {
+                    continue;
+                }
                 right[i - mid] = array[i];
             }
             mergeSort(left);
@@ -199,6 +243,14 @@ public class MinHeap extends IntelligentSIDC implements ADT {
 
             // Merge left and right arrays
             while (i < left.length && j < right.length) {
+                if (left[i] == null) {
+                    i++;
+                    continue;
+                }
+                if (right[j] == null) {
+                    j++;
+                    continue;
+                }
                 // Add smaller keys first
                 if (left[i].getKey() < right[j].getKey()) {
                     array[k] = left[i];
@@ -225,7 +277,7 @@ public class MinHeap extends IntelligentSIDC implements ADT {
 
     // returns index where key was found or returns -1 if not found
     private int binarySearch(Entry[] entries, long key) {
-        int left = 0, right = entries.length - 1; //pointer at the beginning and end of list
+        int left = 0, right = this.size - 1; //pointer at the beginning and end of list
         while (left <= right) {
             int mid = left + (right - left) / 2; // midpoint of l and r
             // Check if key is present at midpoint
@@ -263,6 +315,10 @@ public class MinHeap extends IntelligentSIDC implements ADT {
     public long nextKey(IntelligentSIDC minHeap, long key) {
         mergeSort(heap);
         int location = binarySearch(heap, key);
+        if (location == -1) {
+            System.out.println("Error: Key does not exist!");
+            return -1;
+        }
         int nextIndex = location + 1;
         if (nextIndex == size()) {
             System.out.println("Error: Successor of key does not exist!");
@@ -277,6 +333,10 @@ public class MinHeap extends IntelligentSIDC implements ADT {
     public long prevKey(IntelligentSIDC minHeap, long key) {
         mergeSort(heap);
         int location = binarySearch(heap, key);
+        if (location == -1) {
+            System.out.println("Error: Key does not exist!");
+            return -1;
+        }
         int prevIndex = location - 1;
         if (prevIndex < 0) {
             System.out.println("Error: Predecessor of key does not exist!");
@@ -292,6 +352,9 @@ public class MinHeap extends IntelligentSIDC implements ADT {
         mergeSort(heap);
         int from = binarySearch(heap, key1);
         int to = binarySearch(heap, key2);
+        if (from == -1 || to == -1) {
+            System.out.println("Error: One of the keys does not exist!");
+        }
         if (from > to) {
             int temp = to;
             to = from;
@@ -305,62 +368,5 @@ public class MinHeap extends IntelligentSIDC implements ADT {
             System.out.println("(" + heap[i].getKey() + ", " + heap[i].getValue().getFirstName() + ")");
         }
     }
-
-//    public static void main(String[] args) {
-//        Student s1 = new Student("Chelsie", "Ng", new Student.DOB(12, 18, 1999));
-//        Student s2 = new Student("Nigel", "Yong", new Student.DOB(12, 11, 1999));
-//        Student s3 = new Student("Stella", "Lo", new Student.DOB(1, 30, 1972));
-//        Student s4 = new Student("Kelvin", "Lo", new Student.DOB(10, 14, 1995));
-//        Student s5 = new Student("Chelsie", "Ng", new Student.DOB(12, 18, 1999));
-//        Student s6 = new Student("Nigel", "Yong", new Student.DOB(12, 11, 1999));
-//        Student s7 = new Student("Stella", "Lo", new Student.DOB(1, 30, 1972));
-//        Student s8 = new Student("Kelvin", "Lo", new Student.DOB(10, 14, 1995));
-//        Student s9 = new Student("Chelsie", "Ng", new Student.DOB(12, 18, 1999));
-//        Student s10 = new Student("Nigel", "Yong", new Student.DOB(12, 11, 1999));
-//        long key1 = 40071692;
-//        long key2 = 40071693;
-//        long key3 = 40071694;
-//        long key4 = 40071690;
-//        long key5 = 40071691;
-//        long key6 = 40071699;
-//        long key7 = 40071698;
-//        long key8 = 40071697;
-//        long key9 = 40071696;
-//        long key10 = 40071695;
-//        MinHeap MinHeap = new MinHeap(10);
-//        MinHeap.add(MinHeap, key1, s1);
-//        MinHeap.add(MinHeap, key2, s2);
-//        MinHeap.add(MinHeap, key3, s3);
-//        MinHeap.add(MinHeap, key4, s4);
-//        MinHeap.add(MinHeap, key5, s5);
-//        MinHeap.add(MinHeap, key6, s6);
-//        MinHeap.add(MinHeap, key7, s7);
-//        MinHeap.add(MinHeap, key8, s8);
-//        MinHeap.add(MinHeap, key9, s9);
-//        MinHeap.add(MinHeap, key10, s10);
-//        MinHeap.print();
-//        MinHeap.remove(MinHeap, 40071692);
-//        System.out.println("----------------------");
-//        MinHeap.print();
-//        long k = 02;
-//        MinHeap.add(MinHeap, k, new Student());
-//        System.out.println("----------------------");
-//        MinHeap.print();
-//        long k2 = 9;
-//        long k3 = 10;
-//        MinHeap.add(MinHeap, k2, new Student());
-//        MinHeap.add(MinHeap, k3, new Student());
-//        System.out.println("----------------------");
-//        MinHeap.print();
-//        MinHeap.add(MinHeap, key1, new Student());
-//        Random random = new Random();
-//        int num = random.nextInt(10000000) + 10000000;
-//        for (int i = 0; i < 999; i++) {
-//            long key = num;
-//            MinHeap.add(MinHeap, key, new Student());
-//            num = random.nextInt(10000000) + 10000000;
-//        }
-//        MinHeap.add(MinHeap, key1, new Student());
-//    }
 
 }

@@ -26,6 +26,19 @@ public class BinarySearchTree extends IntelligentSIDC implements ADT {
         return size;
     }
 
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    // returns false as BST is used to add large data
+    public boolean capacityReached() {
+        return false;
+    }
+
+    public Entry remove(IntelligentSIDC intelligentSIDC) {
+        return null;
+    }
+
     // Setter
     public void setRoot(Entry root) {
         this.root = root;
@@ -52,32 +65,112 @@ public class BinarySearchTree extends IntelligentSIDC implements ADT {
         return -1;
     }
 
+    public void SetSIDCThreshold(int size) {
+
+    }
+
     // return all the keys in a sorted sequence
     public long[] allKeys(IntelligentSIDC tree) {
-        inOrder(root);
+        mergeSort(keys.getEntries());
         return keys.getEntries();
     }
 
-    public void inOrder(Entry root) {
-        if (root == null) {
+    // Randomly generates new keys
+    public long generate() {
+        long min = 10000000;
+        long max = 99999999;
+        long newKey = (long) (Math.random() * (max - min + 1) + min);
+        long location = search(newKey);
+        while (location != -1) {
+            newKey = (long) (Math.random() * (max - min + 1) + min);
+            location = search(newKey);
+        }
+        return newKey;
+    }
+
+    // Sorts the array of entries
+    private void mergeSort(long[] array) {
+        if (array == null) {
             return;
         }
-        inOrder(root.getLeft());
-        int location = binarySearch(keys.getEntries(), root.getKey());
-        if (location == -1) {
-            keys.add(root.getKey());
+
+        if (array.length > 1) {
+            int mid = array.length / 2;
+
+            // Split left part
+            long[] left = new long[mid];
+            for (int i = 0; i < mid; i++) {
+                left[i] = array[i];
+            }
+
+            // Split right part
+            long[] right = new long[array.length - mid];
+            for (int i = mid; i < array.length; i++) {
+                right[i - mid] = array[i];
+            }
+            mergeSort(left);
+            mergeSort(right);
+
+            int i = 0;
+            int j = 0;
+            int k = 0;
+
+            // Merge left and right arrays
+            while (i < left.length && j < right.length) {
+                // Add smaller keys first
+                if (left[i] < right[j]) {
+                    array[k] = left[i];
+                    i++;
+                } else {
+                    array[k] = right[j];
+                    j++;
+                }
+                k++;
+            }
+            // Add remaining entries
+            while (i < left.length) {
+                array[k] = left[i];
+                i++;
+                k++;
+            }
+            while (j < right.length) {
+                array[k] = right[j];
+                j++;
+                k++;
+            }
         }
-        inOrder(root.getRight());
+    }
+
+    private long search(long key) {
+        Entry toFind = root;
+        while (toFind.getKey() != key) {
+            if (key < toFind.getKey()) {
+                toFind = toFind.getLeft(); // go left
+            } else {
+                toFind = toFind.getRight(); // go right
+            }
+            if (toFind == null) {
+                return -1; // not found
+            }
+        }
+        return toFind.getKey(); // found
     }
 
     // add an entry for the given key and value
-    public void add(IntelligentSIDC tree, Long key, Student value) {
-        //-------------Insertion part---------------
+    public void add(IntelligentSIDC tree, long key, Student value) {
         // Creating new node
         Entry entry = new Entry(key, value);
         // if tree is empty
         if (root == null) {
             root = entry;
+            keys.add(key);
+            ++size;
+            return;
+        }
+        //Check for duplicates
+        long location = search(key);
+        if (location != -1) {
+//            System.out.println("Duplicates are not allowed!");
             return;
         }
         Entry current = root; // pointer
@@ -88,6 +181,7 @@ public class BinarySearchTree extends IntelligentSIDC implements ADT {
                 current = current.getLeft();
                 if (current == null) {
                     parent.setLeft(entry);
+                    keys.add(key);
                     ++size;
                     return;
                 }
@@ -95,6 +189,7 @@ public class BinarySearchTree extends IntelligentSIDC implements ADT {
                 current = current.getRight();
                 if (current == null) {
                     parent.setRight(entry);
+                    keys.add(key);
                     ++size;
                     return;
                 }
@@ -172,6 +267,7 @@ public class BinarySearchTree extends IntelligentSIDC implements ADT {
             replace.setLeft(toRemove.getLeft());
         }
         --size;
+        keys.remove(key);
         return toRemove; // node removed
     }
 
@@ -215,6 +311,10 @@ public class BinarySearchTree extends IntelligentSIDC implements ADT {
     public long nextKey(IntelligentSIDC tree, long key) {
         long[] entries = allKeys(tree);
         int location = binarySearch(entries, key);
+        if (location == -1) {
+            System.out.println("Error: Key does not exist!");
+            return -1;
+        }
         int nextIndex = location + 1;
         if (nextIndex == entries.length) {
             System.out.println("Error: Successor of key does not exist!");
@@ -228,6 +328,10 @@ public class BinarySearchTree extends IntelligentSIDC implements ADT {
         long[] entries = allKeys(tree);
         int location = binarySearch(entries, key);
         int prevIndex = location - 1;
+        if (location == -1) {
+            System.out.println("Error: Key does not exist!");
+            return -1;
+        }
         if (prevIndex < 0) {
             System.out.println("Error: Predecessor of key does not exist!");
             return -1;
@@ -240,6 +344,9 @@ public class BinarySearchTree extends IntelligentSIDC implements ADT {
         long[] entries = allKeys(this);
         int from = binarySearch(entries, key1);
         int to = binarySearch(entries, key2);
+        if (from == -1 || to == -1) {
+            System.out.println("Error: One of the keys does not exist!");
+        }
         if (from > to) {
             int temp = to;
             to = from;
@@ -247,5 +354,4 @@ public class BinarySearchTree extends IntelligentSIDC implements ADT {
         }
         return (to - from) - 1;
     }
-
 }

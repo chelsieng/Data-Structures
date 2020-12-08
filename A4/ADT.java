@@ -1,8 +1,12 @@
 public interface ADT {
+    // return all keys in sorted sequence
     long[] allKeys(IntelligentSIDC intelligentSIDC);
 
+    // randomly generates new non-existing key of 8 digits
+    long generate();
+
     // add an entry for the given key and value
-    void add(IntelligentSIDC intelligentSIDC, Long key, Student value);
+    void add(IntelligentSIDC intelligentSIDC, long key, Student value);
 
     // remove the entry for the given key
     Entry remove(IntelligentSIDC intelligentSIDC, long key);
@@ -21,4 +25,13 @@ public interface ADT {
 
     // get size of ADT
     int size();
+
+    // set size of ADT
+    void setSize(int size);
+
+    // returns true if capacity was reached
+    boolean capacityReached();
+
+    // for transferring data from one ADT to the other
+    Entry remove(IntelligentSIDC intelligentSIDC);
 }
